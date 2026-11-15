@@ -517,6 +517,7 @@ export async function answerQuestion(args: {
   question: string;
   mode?: LessonMode;
   style?: string;
+  review?: boolean;
   onDelta: (text: string) => void;
   signal?: AbortSignal;
 }): Promise<string> {
@@ -555,6 +556,12 @@ ${transcriptBlock(args.history, 8)}
 <student_question>
 ${question}
 </student_question>
+
+${
+  args.review
+    ? "This lesson is finished. The student is reviewing it; answer questions about any part of the lesson, not only the current idea."
+    : ""
+}
 
 Answer her question directly, as her tutor. Use the chapter and cite the page once if it helps. Keep it to 1–4 sentences unless she explicitly asks for a walkthrough. If her question reveals a misconception, correct it gently. If the chapter does not cover it, say so instead of inventing an answer. Do not repeat the whole concept and do not end with a generic "does that make sense?"
 

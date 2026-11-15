@@ -562,7 +562,7 @@ export function Lesson({
       });
       return;
     }
-    const index = activeIndex;
+    const index = isDone ? lesson.plan.length - 1 : activeIndex;
     const concept = lesson.plan[index];
     if (!concept) return;
     const styleRequest = isStyleInstruction(text);
@@ -583,7 +583,9 @@ export function Lesson({
     jumpToEnd();
 
     const pending =
-      concept.check && !concept.check.answered ? concept.check : null;
+      !isDone && concept.check && !concept.check.answered
+        ? concept.check
+        : null;
 
     if (pending && !styleRequest) {
       setBusy("grading");
@@ -634,6 +636,7 @@ export function Lesson({
         question: text,
         mode,
         style: nextStyle,
+        review: isDone,
         onDelta: (delta) => {
           if (!mountedRef.current) return;
           setLive((current) =>
@@ -866,8 +869,8 @@ export function Lesson({
         </div>
       </div>
 
-      {!isDone && (
-        <footer className="chat-foot">
+      <footer className="chat-foot">
+        {!isDone && (
           <div className="mode-row">
             <button
               type="button"
@@ -880,7 +883,8 @@ export function Lesson({
               <ChevronDown size={13} />
             </button>
           </div>
-          {showNext && (
+        )}
+        {!isDone && showNext && (
             <div className="next-row">
               <button
                 type="button"
@@ -897,7 +901,7 @@ export function Lesson({
               ref={textareaRef}
               rows={1}
               value={composer}
-              placeholder="Message"
+              placeholder={isDone ? "Ask about this lesson" : "Message"}
               onChange={(event) => setComposer(event.target.value)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" && !event.shiftKey) {
@@ -918,9 +922,8 @@ export function Lesson({
             >
               <ArrowUp size={18} />
             </button>
-          </div>
-        </footer>
-      )}
+        </div>
+      </footer>
 
       {modeOpen && (
         <ModeSheet

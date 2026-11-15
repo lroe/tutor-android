@@ -270,7 +270,7 @@ export function Note({
                 (concept) => concept.covered,
               ).length;
               const total = lesson.plan.length;
-              const canOpen = lesson.status !== "done";
+              const canOpen = true;
               const status =
                 lesson.status === "planning"
                   ? "Preparing…"
