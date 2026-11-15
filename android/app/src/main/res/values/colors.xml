@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cove_background">#212121</color>
+    <color name="cove_surface">#2F2F2F</color>
+    <color name="cove_icon_background">#111111</color>
+</resources>

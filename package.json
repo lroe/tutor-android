@@ -1,0 +1,46 @@
+{
+  "name": "cove",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A quiet tutor for your notes.",
+  "engines": {
+    "node": ">=20.19"
+  },
+  "scripts": {
+    "dev": "vite --host",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --host",
+    "typecheck": "tsc --noEmit",
+    "build:android": "VITE_NATIVE=1 tsc --noEmit && vite build",
+    "cap:sync": "npm run build:android && cap sync android",
+    "android:build": "npm run cap:sync && cd android && ./gradlew assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "^8.6.2",
+    "@capacitor/app": "^8.1.2",
+    "@capacitor/core": "^8.6.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.4",
+    "@fontsource-variable/inter": "^5.2.8",
+    "dexie": "^4.2.0",
+    "dexie-react-hooks": "^1.1.7",
+    "jszip": "^3.10.2",
+    "lucide-react": "^0.468.0",
+    "pdfjs-dist": "^5.4.149",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^4.0.0",
+    "@capacitor/cli": "^8.6.2",
+    "@types/react": "^19.1.10",
+    "@types/react-dom": "^19.1.7",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "~5.9.2",
+    "vite": "^7.1.3",
+    "vite-plugin-pwa": "^1.0.3"
+  }
+}
