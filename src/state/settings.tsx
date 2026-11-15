@@ -10,11 +10,13 @@ import {
 import type { AIProvider, Settings } from "../lib/types";
 
 const STORAGE_KEY = "cove.settings.v1";
-const BUILD_PROXY_URL = (import.meta.env.VITE_COVE_PROXY_URL ?? "").trim();
+export const DEFAULT_PROXY_URL = (
+  import.meta.env.VITE_COVE_PROXY_URL ?? ""
+).trim();
 
 const DEFAULT_SETTINGS: Settings = {
   provider: "opencode",
-  proxyUrl: BUILD_PROXY_URL,
+  proxyUrl: DEFAULT_PROXY_URL,
   geminiKey: "",
 };
 
@@ -33,7 +35,7 @@ function loadSettings(): Settings {
     const proxyUrl =
       typeof parsed.proxyUrl === "string" && parsed.proxyUrl.trim()
         ? parsed.proxyUrl.trim()
-        : BUILD_PROXY_URL;
+        : DEFAULT_PROXY_URL;
     const geminiKey =
       typeof parsed.geminiKey === "string"
         ? parsed.geminiKey.trim()

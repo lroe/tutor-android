@@ -705,9 +705,15 @@ img {
   gap: 2px;
 }
 
-.settings-fields .text-button {
-  align-self: flex-start;
+.settings-links {
+  display: flex;
+  align-items: center;
+  gap: 14px;
   margin-top: 8px;
+}
+
+.settings-links .text-button {
+  margin-top: 0;
 }
 
 .field-status {

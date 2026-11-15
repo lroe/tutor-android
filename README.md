@@ -179,33 +179,85 @@ For a future iOS Capacitor build, the origin is typically
 
 ---
 
-## Debug vs release
+## Cloudflare Worker URL in Settings
 
-The current APK is a **debug** build. It is fine for personal USB installs and
-testing, but not for distributing through Play Store.
+The default Worker URL is baked into the APK at build time from `.env.local`.
+On the device, open the gear → **Cloudflare Worker URL**:
 
-For a release build later:
+- The current default is prefilled.
+- You can paste a different Worker URL and tap **Test connection**.
+- **Use default** restores the baked-in URL.
+- The change is stored on that device only.
 
-1. Create a keystore (do not commit it):
+This lets you change the Cloudflare worker without rebuilding the APK.
 
-   ```bash
-   keytool -genkeypair -v \
-     -keystore ~/cove-release.jks \
-     -alias cove \
-     -keyalg RSA -keysize 2048 -validity 10000
-   ```
+The default in the published build points at your current Worker. If you share
+the APK with someone else, they will use your Worker until they change it in
+Settings — and that means your Go allowance. Change `ALLOWED_ORIGIN` on the
+Worker and use separate Worker URLs if you distribute it widely.
 
-2. Add a `keystore.properties` outside git with the passwords and path.
-3. Configure `signingConfigs.release` in `android/app/build.gradle`.
-4. Run:
+---
 
-   ```bash
-   cd android
-   ./gradlew bundleRelease
-   ```
+## Release signing
 
-Keep the keystore backed up. Losing it means you cannot update the same Play
-Store listing.
+This repo is set up for signed release builds.
+
+Local signing material (kept outside git):
+
+```text
+/home/jeevankumar/.cove-android/cove-release.jks
+/home/jeevankumar/.cove-android/RELEASE-CREDENTIALS.txt
+android/keystore.properties        (ignored)
+```
+
+`android/app/build.gradle` reads `android/keystore.properties` and signs the
+release build with that keystore.
+
+Current version:
+
+```text
+versionCode 1
+versionName 1.0.0
+package com.lroe.cove
+```
+
+Build release artifacts:
+
+```bash
+npm run cap:sync
+cd android
+./gradlew assembleRelease bundleRelease
+```
+
+Outputs:
+
+```text
+android/app/build/outputs/apk/release/app-release.apk
+android/app/build/outputs/bundle/release/app-release.aab
+```
+
+Verify the APK signature:
+
+```bash
+$ANDROID_HOME/build-tools/36.1.0/apksigner verify --print-certs \
+  android/app/build/outputs/apk/release/app-release.apk
+```
+
+Back up the keystore and credentials file somewhere safe. If you lose them, you
+cannot update the app with the same signing identity.
+
+### Installing release over debug
+
+The debug APK and release APK use different signing keys. Android will refuse to
+install one over the other. To move a phone from debug to release, uninstall the
+debug app first, which removes its local notes and progress. Keep the original
+PDF/PPTX files so they can be uploaded again.
+
+### Play Store
+
+The `.aab` is the Play Store upload format. Publishing there requires a Google
+Play developer account, store listing, privacy policy, and data-safety form.
+The signed `.apk` is fine for direct sharing and sideloading.
 
 ---
 

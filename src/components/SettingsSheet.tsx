@@ -4,6 +4,7 @@ import { GEMINI_MODEL, OPENCODE_MODEL } from "../lib/models";
 import { testProxy } from "../lib/opencode";
 import { describeAIError } from "../lib/gemini";
 import type { AIProvider, Settings } from "../lib/types";
+import { DEFAULT_PROXY_URL } from "../state/settings";
 
 export function SettingsSheet({
   settings,
@@ -111,7 +112,7 @@ export function SettingsSheet({
       {provider === "opencode" ? (
         <div className="settings-fields">
           <label className="field">
-            <span>Worker URL</span>
+            <span>Cloudflare Worker URL</span>
             <input
               type="url"
               inputMode="url"
@@ -127,14 +128,29 @@ export function SettingsSheet({
               autoFocus
             />
           </label>
-          <button
-            type="button"
-            className="text-button"
-            onClick={() => void runTest()}
-            disabled={!proxyUrl.trim() || testState === "testing"}
-          >
-            {testState === "testing" ? "Checking…" : "Test connection"}
-          </button>
+          <div className="settings-links">
+            <button
+              type="button"
+              className="text-button"
+              onClick={() => void runTest()}
+              disabled={!proxyUrl.trim() || testState === "testing"}
+            >
+              {testState === "testing" ? "Checking…" : "Test connection"}
+            </button>
+            {DEFAULT_PROXY_URL && proxyUrl.trim() !== DEFAULT_PROXY_URL && (
+              <button
+                type="button"
+                className="text-button"
+                onClick={() => {
+                  setProxyUrl(DEFAULT_PROXY_URL);
+                  setTestState("idle");
+                  setTestMessage("");
+                }}
+              >
+                Use default
+              </button>
+            )}
+          </div>
           {testMessage && (
             <p
               className={
