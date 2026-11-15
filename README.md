@@ -16,6 +16,8 @@ WebView. There is no Android server and no hosted web app required.
 - Smart titles from the document or first slide, rename from the note page.
 - The same lessons, ElI5 + textbook mode, learning modes, chat style overrides,
   progress, delete, and hide-concepts controls as the web app.
+- Finished lessons reopen in **review**: full history, previous diagrams, and a
+  composer for follow-up questions. No Next button or new grading in review.
 - Local storage in the WebView (IndexedDB + localStorage). Notes and PDFs stay
   on the phone.
 - OpenCode Go through the Cloudflare Worker, or Gemini directly, configured in
